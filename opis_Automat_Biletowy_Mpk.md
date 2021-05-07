@@ -1,5 +1,5 @@
 link  do repozytorium:
-https://github.com/hardy6413/AutomatBiletowyMpk
+
 
 
 Opis zadania
