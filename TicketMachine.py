@@ -18,6 +18,7 @@ class TicketMachine(CoinContainer):
         super().__init__()
 
     def addTicket(self, ticket, amount=1):
+        print("testasdf")
         self.ticketsPrice = self.ticketsPrice+ self.avaiableTickets[str(ticket)] * amount
 
     def showCostOfTickets(self):
