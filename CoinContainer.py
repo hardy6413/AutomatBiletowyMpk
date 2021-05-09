@@ -14,6 +14,7 @@ class CoinContainer:
             self.value = Decimal(str(value))
             for i in range(amount):
                 self.coins_list.append(self.value)
+            print(self.sumOfCoins())
         else:
             self.value = Decimal('0')
             print("NIEZNANA MONETA PRZYPISANO WARTOSC 0zł")  # TODO:string do zmiany
