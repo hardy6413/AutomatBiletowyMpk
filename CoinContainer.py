@@ -20,7 +20,7 @@ class CoinContainer:
             print("NIEZNANA MONETA PRZYPISANO WARTOSC 0zł")  # TODO:string do zmiany
 
     def sumOfCoins(self):
-        return sum(self.coins_list)
+        return Decimal(sum(self.coins_list))
 
     def chargeCoin(self, value):  # TODO: to najprawodpodobniej bede musial zmeinic
         if value in self.coins_list:

@@ -1,10 +1,8 @@
-import tkinter
-
+from decimal import *
 from CoinContainer import CoinContainer
 from TicketMachine import TicketMachine
-
+import math
 from tkinter import *
-
 
 
 def showFrame(frame):
@@ -16,7 +14,6 @@ class StartPage(Frame):
         Frame.__init__(self, *args, **kwargs)
         global pageOne
         pageOne = PageOne()
-
 
 
 class PageOne(Frame):
@@ -88,29 +85,68 @@ class PageTwo(Frame):
         entryAmountOfCoins = Entry(self, bd=5, textvariable=amountOfCoins)
         entryAmountOfCoins.grid(row=3, column=3, columnspan=3, sticky="nsew")
         amountOfCoins.set(1)
-       #
+
         i = 0
         for coin in userCoinContainer._coins_format_list:
             Button(self,
                    text=coin,
-                   command=lambda coin=coin: ticketMachine.addCoin(coin, submitCoin()), height=2, width=4).grid(row=1,
-                                                                                                                column=i,
-                                                                                                                sticky="nsew")
+                   command=lambda coin=coin: submitCoin(coin, submitAmount()), height=2, width=4).grid(row=1,
+                                                                                                       column=i,
+                                                                                                       sticky="nsew")
             i += 1
 
         labelDodaj = Label(self, text="dodaj monete klikając", height=0, width=20).grid(row=0, column=3, columnspan=3,
-                                                                                sticky="nsew")
-        labelDodaj = Label(self, text="ilość", height=0, width=6).grid(row=3, column=1, columnspan=1,
                                                                                         sticky="nsew")
-        Button(self,text="czy chcesz dodać kolejne bilety?",command=lambda:showFrame(pageOne), height=2, width=25).grid(row=5,column=1,columnspan=6,sticky="nsew")
-        Button(self, text="Zakończ transakcje", command=None, height=2,
+        labelDodaj = Label(self, text="ilość", height=0, width=6).grid(row=3, column=1, columnspan=1,
+                                                                       sticky="nsew")
+        Button(self, text="czy chcesz dodać kolejne bilety?", command=lambda: showFrame(pageOne), height=2,
+               width=25).grid(row=5, column=1, columnspan=6, sticky="nsew")
+        Button(self, text="Zakończ transakcje", command=lambda: finishTransaction(), height=2,
                width=15).grid(row=6, column=1, columnspan=6, sticky="nsew")
 
-        def submitCoin() -> int:
+        def finishTransaction():
+            ticketMachine.ticketsPrice = round(ticketMachine.ticketsPrice,1)
+            sumOfUsersCoins=round(userCoinContainer.sumOfCoins(),1)
+            if ticketMachine.ticketsPrice > sumOfUsersCoins: #TODO porownywaniue ulamkowych rzeczy
+                return None
+            window = Tk()
+            window.title("")
+            if ticketMachine.ticketsPrice == sumOfUsersCoins:  # TODO:to musze pozniej ogarnac
+                ticketMachine.coins_list = ticketMachine.coins_list + userCoinContainer.coins_list
+                Label(window, text="dziękujemy za transakcję", command=None, height=2,
+                      width=25).grid(row=1, column=1, columnspan=1, sticky="nsew")
+            elif ticketMachine.ticketsPrice < sumOfUsersCoins:
+                ticketMachine.coins_list = ticketMachine.coins_list + userCoinContainer.coins_list
+                returnList = []
+                remainder = Decimal(0)
+                remainder = userCoinContainer.sumOfCoins() - ticketMachine.ticketsPrice
+                remainder = round(remainder,1)
+                ticketMachine.coins_list.sort(reverse=True)
+                for value in ticketMachine.coins_list:
+                    if value == remainder:
+                        remainder -=value
+                        returnList.append(value)
+                    elif round((float(value) % float(remainder)),1) == float(value):
+                        remainder =  round(float(remainder) - float(value),1)
+                        returnList.append(value)
+                    if remainder == 0:
+                        print(returnList)
+                        return returnList
+                if sum(returnList) != round(sumOfUsersCoins - ticketMachine.ticketsPrice,1):
+                    print("nie mnozna wydac reszty przeprasamy")
+                    for coin in userCoinContainer.coins_list:
+                        if coin in ticketMachine.coins_list:
+                            ticketMachine.coins_list.remove(coin)
+
+
+
+        def submitCoin(coin, amount):
+            userCoinContainer.addCoin(coin, amount)
+
+        def submitAmount() -> int:
             amount = amountOfCoins.get()
             amountOfCoins.set(1)
             return amount
-
 
 
 if __name__ == '__main__':

@@ -19,7 +19,7 @@ class TicketMachine(CoinContainer):
 
     def addTicket(self, ticket, amount=1):
         print("testasdf")
-        self.ticketsPrice = self.ticketsPrice+ self.avaiableTickets[str(ticket)] * amount
+        self.ticketsPrice = Decimal(self.ticketsPrice+ self.avaiableTickets[str(ticket)] * amount)
 
     def showCostOfTickets(self):
         print("total cost of tickets :", self.ticketsPrice)
