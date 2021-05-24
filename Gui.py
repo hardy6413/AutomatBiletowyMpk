@@ -12,11 +12,14 @@ def showFrame(frame):
 
 
 def resetState():
+    '''method that prepares the program after someone bought the ticket it checks that user list of coins is empty after
+    it was added to the ticket machine'''
     userCoinContainer.coins_list = []
     ticketMachine.ticketsPrice = 0
 
 
 class StartPage(Frame):
+    '''class that starts the program gives some coins to the ticket machine so its not empty it initiates the other classes '''
     global userCoinContainer
     global ticketMachine
     userCoinContainer = CoinContainer()
@@ -31,11 +34,11 @@ class StartPage(Frame):
 
 
 class PageOne(Frame):
+    '''first page of ticket machine conatain buttons entries ,methods connected with adding tickets '''
     def __init__(self, *args, **kwargs):
         Frame.__init__(self, *args, **kwargs)
 
-        self.grid_rowconfigure(0, weight=0)
-        self.grid_columnconfigure(0, weight=0)
+        '''mesh ,entries configuration '''
         self.grid(row=0, column=0, sticky="NSEW")
         entries = []
         entry1 = StringVar()
@@ -77,6 +80,7 @@ class PageOne(Frame):
         entries.append(entry6)
 
         def ticketsAdder():
+            '''Method that is checking for proper amount of tickets,adds the tickets to the record starts the process of migration to the second page '''
             i = 0
             for ticket in ticketMachine.avaiableTickets:
                 try:
@@ -84,8 +88,10 @@ class PageOne(Frame):
                     if amount > 0:
                         ticketMachine.addTicket(ticket, amount)
                     elif amount < 0:
+                        ticketMachine.ticketsPrice = 0
                         raise InapropriateAmountException("Zła ilość biletów")
                 except ValueError:
+                    ticketMachine.ticketsPrice = 0
                     raise InapropriateAmountException("Zła ilość biletów")
                 entries[6 + i].set("0")
                 i += 1
@@ -111,14 +117,14 @@ class PageOne(Frame):
 class PageTwo(Frame):
     def __init__(self, *args, **kwargs):
         Frame.__init__(self, *args, **kwargs)
-
+        '''mesh setup ,entry setup'''
         self.grid(row=0, column=0, sticky="NSEW")
 
         amountOfCoins = StringVar()
         entryAmountOfCoins = Entry(self, bd=5, textvariable=amountOfCoins, width=5, font=16)
         entryAmountOfCoins.grid(row=3, column=4, columnspan=4, sticky="nsew")
         amountOfCoins.set(1)
-
+        '''button and labels placement '''
         i = 0
         for coin in userCoinContainer._coins_format_list:
             Button(self, text=coin,
@@ -143,6 +149,7 @@ class PageTwo(Frame):
 
 
         def finishTransaction():
+            '''method that  passes the amount of coins and checks for the remainder'''
             returnList = ticketMachine.remainderCalculator(userCoinContainer)
             if returnList is None:
                 return
@@ -157,6 +164,7 @@ class PageTwo(Frame):
             printChange(info)
 
         def printChange(info):
+            '''prints info after program calculated change and resets its state'''
             messagebox.showinfo("", info)
             showFrame(pageOne)
             resetState()

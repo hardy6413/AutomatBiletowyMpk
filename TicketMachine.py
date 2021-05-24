@@ -3,6 +3,7 @@ from decimal import *
 
 
 class TicketMachine(CoinContainer):
+    '''Class that helps me to do everyting around tickets'''
     avaiableTickets = {
         "Bilet ulgowy20m": 2.20,
         "Bilet ulgowy40m": 4.70,
@@ -24,6 +25,7 @@ class TicketMachine(CoinContainer):
         print("total cost of tickets :", self.ticketsPrice)
 
     def remainderCalculator(self,userCoinContainer):
+        '''Method that calculates the change when user paid more than he should for a ticket'''
         self.ticketsPrice = (round(Decimal(self.ticketsPrice), 1))
         sumOfUsersCoins = round(userCoinContainer.sumOfCoins(), 1)
         returnList = []

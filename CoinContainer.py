@@ -3,6 +3,7 @@ from InapropriateAmountException import InapropriateAmountException
 
 
 class CoinContainer:
+    '''class asociated with correct coin formats and coin container for both user and ticket machine'''
     _coins_format_list = ("0.01", "0.02", "0.05", "0.1", "0.2", "0.5", "1", "2", "5", "10", "20", "50")
 
     def __init__(self):
@@ -21,6 +22,7 @@ class CoinContainer:
 
 
     def submitAmount(self,entry) -> int:
+        '''method that checks if the correct amount was submitted'''
         try:
             amount = int(entry)
             if (amount <= 0):
