@@ -4,12 +4,12 @@ from decimal import *
 
 class TicketMachine(CoinContainer):
     avaiableTickets = {
-        "reduced20mTicket": 2.20,
-        "reduced40mTicket": 4.70,
-        "reduced60mTicket": 7.50,
-        "normal20mTicket": 3.70,
-        "normal40mTicket": 6.20,
-        "normal60mTicket": 10.2
+        "Bilet ulgowy20m": 2.20,
+        "Bilet ulgowy40m": 4.70,
+        "Bilet ulgowy60m": 7.50,
+        "Bilet 20m": 3.70,
+        "Bilet 40m": 6.20,
+        "Bilet 60m": 10.2
     }
 
     ticketsPrice = 0
@@ -24,18 +24,17 @@ class TicketMachine(CoinContainer):
         print("total cost of tickets :", self.ticketsPrice)
 
     def remainderCalculator(self,userCoinContainer):
-        self.ticketsPrice = round(self.ticketsPrice, 1)
+        self.ticketsPrice = (round(Decimal(self.ticketsPrice), 1))
         sumOfUsersCoins = round(userCoinContainer.sumOfCoins(), 1)
+        returnList = []
         if self.ticketsPrice > sumOfUsersCoins:
             return None
         if self.ticketsPrice == sumOfUsersCoins:
             self.coins_list = self.coins_list + userCoinContainer.coins_list
-            info = "Dziękujemy za transakcję"
-            return info
+            return returnList
 
         elif self.ticketsPrice < sumOfUsersCoins:
             self.coins_list = self.coins_list + userCoinContainer.coins_list
-            returnList = []
             remainder = userCoinContainer.sumOfCoins() - self.ticketsPrice
             remainder = round(remainder, 1)
             self.coins_list.sort(reverse=True)
@@ -49,15 +48,11 @@ class TicketMachine(CoinContainer):
                     remainder = round(Decimal(remainder - value), 1)
                     returnList.append(value)
                 if remainder == 0:
-                    info = "Reszta \n " + str(",".join([str(float(x)) for x in returnList]))
-                    return info
+                    return returnList
 
             if sum(returnList) != round(sumOfUsersCoins - self.ticketsPrice, 1):
-                info = "Tylko odliczona kwota \n" + str(
-                    ",".join([str(float(x)) for x in userCoinContainer.coins_list]))
-
                 for coin in userCoinContainer.coins_list:
                     if coin in self.coins_list:
                         self.coins_list.remove(coin)
-                return info
+                return userCoinContainer.coins_list
 

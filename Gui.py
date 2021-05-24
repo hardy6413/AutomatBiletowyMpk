@@ -1,4 +1,3 @@
-from decimal import *
 from tkinter import messagebox
 from CoinContainer import CoinContainer
 from InapropriateAmountException import InapropriateAmountException
@@ -90,19 +89,20 @@ class PageOne(Frame):
                     raise InapropriateAmountException("Zła ilość biletów")
                 entries[6 + i].set("0")
                 i += 1
+
             if ticketMachine.ticketsPrice == 0:
                 raise InapropriateAmountException("Nie wybrałeś żadnego biletu")
-            ticketMachine.showCostOfTickets()  # zeby mi pokaalo do sprawdzenia  pozniej usuanc
+            #ticketMachine.showCostOfTickets()
             pageTwo = PageTwo()
             showFrame(pageTwo)
 
         i = 0
         for ticket in ticketMachine.avaiableTickets:
-            Label(self, text=str(ticket) + "   price  " + str(ticketMachine.avaiableTickets[str(ticket)]), height=1,
+            Label(self, text=str(ticket) + "   cena  " + str(ticketMachine.avaiableTickets[str(ticket)]), height=1,
                   width=30, font=10) \
                 .grid(row=i, column=0)
 
-            Button(self, text="Add", command=ticketsAdder, height=1, width=10, font="16") \
+            Button(self, text="dodaj", command=ticketsAdder, height=1, width=10, font="16") \
                 .grid(row=i, column=2)
 
             i += 1
@@ -121,16 +121,16 @@ class PageTwo(Frame):
 
         i = 0
         for coin in userCoinContainer._coins_format_list:
-            test = entryAmountOfCoins.get()
-            Button(self, text=coin, command=lambda coin=coin: userCoinContainer.addCoin(coin, userCoinContainer.submitAmount(entryAmountOfCoins.get())),
+            Button(self, text=coin,
+                   command=lambda coin=coin: userCoinContainer.addCoin(coin, userCoinContainer.submitAmount(entryAmountOfCoins.get())),
                    height=2, width=4, font=16) \
                 .grid(row=1, column=i, sticky="nsew")
             i += 1
+        addTxt="dodaj monete klikając , do zapłaty " + str(round(ticketMachine.ticketsPrice - userCoinContainer.sumOfCoins(),1))
+        labelDodaj = Label(self, text=addTxt, height=2, width=30, font=16) \
+            .grid(row=0, column=2, columnspan=8, sticky="nsew")
 
-        labelDodaj = Label(self, text="dodaj monete klikając", height=2, width=15, font=16) \
-            .grid(row=0, column=3, columnspan=5, sticky="nsew")
-
-        labelDodaj = Label(self, text="ilość", height=0, width=6, font=16) \
+        labelDodaj = Label(self, text="ilość", height=0, width=6, font=10) \
             .grid(row=3, column=2, columnspan=2, sticky="nsew")
 
         Button(self, text="czy chcesz dodać kolejne bilety?", command=lambda: showFrame(pageOne), height=2, width=20) \
@@ -139,9 +139,21 @@ class PageTwo(Frame):
         Button(self, text="Zakończ transakcje", command=lambda: finishTransaction(), height=2, width=10). \
             grid(row=6, column=4, columnspan=4, sticky="nsew")
 
+
+
+
         def finishTransaction():
-            ticketMachine.ticketsPrice = round(ticketMachine.ticketsPrice, 1)
-            info = ticketMachine.remainderCalculator(userCoinContainer)
+            returnList = ticketMachine.remainderCalculator(userCoinContainer)
+            if returnList is None:
+                return
+            elif sum(returnList) == 0:
+                info  = "Dziękujemy za transakcję"
+            elif returnList == userCoinContainer.coins_list:
+                info = "Tylko odliczona kwota \n" + str(
+                    ",".join([str(float(x)) for x in returnList]))
+            else:
+                info = "Reszta \n" + str(
+                    ",".join([str(float(x)) for x in returnList]))
             printChange(info)
 
         def printChange(info):
