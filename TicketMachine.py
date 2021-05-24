@@ -22,3 +22,42 @@ class TicketMachine(CoinContainer):
 
     def showCostOfTickets(self):
         print("total cost of tickets :", self.ticketsPrice)
+
+    def remainderCalculator(self,userCoinContainer):
+        self.ticketsPrice = round(self.ticketsPrice, 1)
+        sumOfUsersCoins = round(userCoinContainer.sumOfCoins(), 1)
+        if self.ticketsPrice > sumOfUsersCoins:
+            return None
+        if self.ticketsPrice == sumOfUsersCoins:
+            self.coins_list = self.coins_list + userCoinContainer.coins_list
+            info = "Dziękujemy za transakcję"
+            return info
+
+        elif self.ticketsPrice < sumOfUsersCoins:
+            self.coins_list = self.coins_list + userCoinContainer.coins_list
+            returnList = []
+            remainder = userCoinContainer.sumOfCoins() - self.ticketsPrice
+            remainder = round(remainder, 1)
+            self.coins_list.sort(reverse=True)
+            for value in self.coins_list:
+                value = round(Decimal(value), 1)
+                remainder = round(Decimal(remainder), 1)
+                if value == remainder:
+                    remainder -= value
+                    returnList.append(value)
+                elif remainder - value > 0:
+                    remainder = round(Decimal(remainder - value), 1)
+                    returnList.append(value)
+                if remainder == 0:
+                    info = "Reszta \n " + str(",".join([str(float(x)) for x in returnList]))
+                    return info
+
+            if sum(returnList) != round(sumOfUsersCoins - self.ticketsPrice, 1):
+                info = "Tylko odliczona kwota \n" + str(
+                    ",".join([str(float(x)) for x in userCoinContainer.coins_list]))
+
+                for coin in userCoinContainer.coins_list:
+                    if coin in self.coins_list:
+                        self.coins_list.remove(coin)
+                return info
+

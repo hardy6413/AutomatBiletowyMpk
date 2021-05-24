@@ -1,11 +1,13 @@
 from decimal import *
 
+from Gui import *
+from InapropriateAmountException import InapropriateAmountException
+
 
 class CoinContainer:
     _coins_format_list = ("0.01", "0.02", "0.05", "0.1", "0.2", "0.5", "1", "2", "5", "10", "20", "50")
 
-    def __init__(
-            self):  # TODO: generalnie musze dodać liste tak że będą dwie listy  jedna z monetami automatu oraz wrzuconymi prezez kogos
+    def __init__(self):  # TODO: generalnie musze dodać liste tak że będą dwie listy  jedna z monetami automatu oraz wrzuconymi prezez kogos
         self.coins_list = []
         self.value = 0
 
@@ -31,3 +33,12 @@ class CoinContainer:
 
     def returnAllCoins(self):
         return self.coins_list
+
+    def submitAmount(self,entry) -> int:
+        try:
+            amount = int(entry)
+            if (amount <= 0):
+                raise InapropriateAmountException("Zła ilość monet")
+            return amount
+        except ValueError:
+            raise InapropriateAmountException("Zła ilość monet")
