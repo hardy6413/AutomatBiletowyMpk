@@ -3,9 +3,7 @@ from CoinContainer import CoinContainer
 from InapropriateAmountException import InapropriateAmountException
 from TicketMachine import TicketMachine
 from tkinter import *
-
-
-
+from decimal import *
 
 def showFrame(frame):
     frame.tkraise()
@@ -27,8 +25,9 @@ class StartPage(Frame):
 
     def __init__(self, *args, **kwargs):
         Frame.__init__(self, *args, **kwargs)
-        ticketMachine.coins_list += [0.01, 0.01, 0.02, 0.05, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.2, 0.5, 1, 2,
-                                     5]  # STARTOWE MONETY DLA AUTOMATU
+        additionalCoins = ["0.01", "0.01", "0.02", "0.05", "0.1", "0.1", "0.1", "0.1", "0.1", "0.1", "0.2", "0.5", "1", "2",
+                                    "5"]
+        ticketMachine.coins_list += list(map(Decimal,additionalCoins))  # STARTOWE MONETY DLA AUTOMATU
         global pageOne
         pageOne = PageOne()
 
@@ -132,7 +131,7 @@ class PageTwo(Frame):
                    height=2, width=4, font=16) \
                 .grid(row=1, column=i, sticky="nsew")
             i += 1
-        addTxt="dodaj monete klikając , do zapłaty " + str(round(ticketMachine.ticketsPrice - userCoinContainer.sumOfCoins(),1))
+        addTxt="dodaj monete klikając , do zapłaty " + str((ticketMachine.ticketsPrice - userCoinContainer.sumOfCoins()))
         labelDodaj = Label(self, text=addTxt, height=2, width=30, font=16) \
             .grid(row=0, column=2, columnspan=8, sticky="nsew")
 
