@@ -98,7 +98,7 @@ class PageOne(Frame):
 
             if ticketMachine.ticketsPrice == 0:
                 raise InapropriateAmountException("Nie wybrałeś żadnego biletu")
-            #ticketMachine.showCostOfTickets()
+            ticketMachine.showCostOfTickets()
             pageTwo = PageTwo()
             showFrame(pageTwo)
 

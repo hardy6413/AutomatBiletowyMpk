@@ -73,6 +73,24 @@ class MyTestCase(unittest.TestCase):
 
         self.assertEqual(sum(returnList),0)
 
+    def test_shouldSumTicketsPriceCorrectly(self):
+        # given
+        ticketMachine = TicketMachine()
+        firstTicket = "Bilet ulgowy20m"
+        secondTicket = "Bilet ulgowy60m"
+        ticketMachine.addTicket(firstTicket)
+        ticketMachine.addTicket(secondTicket)
+
+        # when
+        sumOfTickets = round(Decimal(ticketMachine.avaiableTickets[firstTicket] + ticketMachine.avaiableTickets[secondTicket]) ,1)
+        ticketMachine.ticketsPrice= round(ticketMachine.ticketsPrice,1)
+
+        # then
+        self.assertEqual(sumOfTickets,ticketMachine.ticketsPrice)
+
+
+
+
 
     def test_shouldNotResetCoinsListAfterAddingTicket(self):
         # given

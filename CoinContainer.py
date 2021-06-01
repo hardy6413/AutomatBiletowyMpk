@@ -15,7 +15,7 @@ class CoinContainer:
             self.value = Decimal(str(value))
             for i in range(amount):
                 self.coins_list.append(self.value)
-       # print(" wpłacono " + str(self.sumOfCoins()))
+        print(" wpłacono " + str(self.sumOfCoins()))
 
     def sumOfCoins(self):
         return Decimal(sum(self.coins_list))
