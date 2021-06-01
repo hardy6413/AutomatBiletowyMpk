@@ -26,8 +26,8 @@ class TicketMachine(CoinContainer):
 
     def remainderCalculator(self,userCoinContainer):
         '''Method that calculates the change when user paid more than he should for a ticket'''
-        self.ticketsPrice = (round(Decimal(self.ticketsPrice), 1))
-        sumOfUsersCoins = round(userCoinContainer.sumOfCoins(), 1)
+        self.ticketsPrice = (round(Decimal(self.ticketsPrice), 2))
+        sumOfUsersCoins = round(userCoinContainer.sumOfCoins(), 2)
         returnList = []
         if self.ticketsPrice > sumOfUsersCoins:
             return None
@@ -38,21 +38,21 @@ class TicketMachine(CoinContainer):
         elif self.ticketsPrice < sumOfUsersCoins:
             self.coins_list = self.coins_list + userCoinContainer.coins_list
             remainder = userCoinContainer.sumOfCoins() - self.ticketsPrice
-            remainder = round(remainder, 1)
+            remainder = round(remainder, 2)
             self.coins_list.sort(reverse=True)
             for value in self.coins_list:
-                value = round(Decimal(value), 1)
-                remainder = round(Decimal(remainder), 1)
+                value = round(Decimal(value), 2)
+                remainder = round(Decimal(remainder), 2)
                 if value == remainder:
                     remainder -= value
                     returnList.append(value)
                 elif remainder - value > 0:
-                    remainder = round(Decimal(remainder - value), 1)
+                    remainder = round(Decimal(remainder - value), 2)
                     returnList.append(value)
                 if remainder == 0:
                     return returnList
 
-            if sum(returnList) != round(sumOfUsersCoins - self.ticketsPrice, 1):
+            if sum(returnList) != round(sumOfUsersCoins - self.ticketsPrice, 2):
                 for coin in userCoinContainer.coins_list:
                     if coin in self.coins_list:
                         self.coins_list.remove(coin)
