@@ -115,7 +115,7 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(sum(returnList), 0)
 
 
-    def test_shouldRaiseIncorrectValueErrorWhenAmountIsNotCorrect(self):
+    def test_shouldRaiseIncorrectValueErrorWhenAmountIsNotInteger(self):
         # given
         userCoinContainer = CoinContainer()
 
@@ -125,6 +125,19 @@ class MyTestCase(unittest.TestCase):
 
         with self.assertRaises(InapropriateAmountException,) as context:
             userCoinContainer.submitAmount(0.3)
+
+
+    def test_shouldRaiseIncorrectValueErrorWhenAmountIsNegative(self):
+        # given
+        userCoinContainer = CoinContainer()
+
+        # when
+
+        # then
+
+        with self.assertRaises(InapropriateAmountException,) as context:
+            userCoinContainer.submitAmount(-5)
+
 
 if __name__ == '__main__':
     unittest.main()
