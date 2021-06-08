@@ -8,6 +8,7 @@ from TicketMachine import TicketMachine
 
 class MyTestCase(unittest.TestCase):
     def test_shouldRetunrNoRemainder(self):
+        '''tests if ticket machine returns no remainder given exact price of ticket'''
         # given
         ticketMachine = TicketMachine()
         userCoinContainer = CoinContainer()
@@ -22,6 +23,7 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(0, sum(returnList))
 
     def test_shouldReturnRemainder(self):
+        '''tests if ticket machine returns remainder correctly'''
         # given
         ticketMachine = TicketMachine()
         userCoinContainer = CoinContainer()
@@ -43,6 +45,7 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(sum(returnList), round(sum(expectedReturnList),1))
 
     def test_shouldReturnCantReturnRemainder(self):
+        '''tests if ticket machine return correct amount when cant return remainder'''
         # given
         ticketMachine = TicketMachine()
         userCoinContainer = CoinContainer()
@@ -59,6 +62,7 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(returnList, expectedReturnList)
 
     def test_shouldCorrectlySumCoins(self):
+        '''tests if ticket machine correctly sums the coins given to the machine'''
         # given
         ticketMachine = TicketMachine()
         userCoinContainer = CoinContainer()
@@ -74,6 +78,7 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(sum(returnList),0)
 
     def test_shouldSumTicketsPriceCorrectly(self):
+        '''tests if ticket machine correctly calculates price of multiple tickets'''
         # given
         ticketMachine = TicketMachine()
         firstTicket = "Bilet ulgowy20m"
@@ -93,6 +98,7 @@ class MyTestCase(unittest.TestCase):
 
 
     def test_shouldNotResetCoinsListAfterAddingTicket(self):
+        '''tests if ticket machine resets  coins list of given coins after adding additional ticket'''
         # given
         ticketMachine = TicketMachine()
         userCoinContainer = CoinContainer()
@@ -116,6 +122,7 @@ class MyTestCase(unittest.TestCase):
 
 
     def test_shouldRaiseIncorrectValueErrorWhenAmountIsNotInteger(self):
+        '''test if program correctly raises  error when user gives not integer as input '''
         # given
         userCoinContainer = CoinContainer()
 
@@ -128,6 +135,7 @@ class MyTestCase(unittest.TestCase):
 
 
     def test_shouldRaiseIncorrectValueErrorWhenAmountIsNegative(self):
+        '''test if program correctly raises  error when user gives negative integer as input '''
         # given
         userCoinContainer = CoinContainer()
 
