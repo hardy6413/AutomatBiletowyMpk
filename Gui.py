@@ -5,6 +5,7 @@ from TicketMachine import TicketMachine
 from tkinter import *
 from decimal import *
 
+
 def showFrame(frame):
     frame.tkraise()
 
@@ -25,15 +26,17 @@ class StartPage(Frame):
 
     def __init__(self, *args, **kwargs):
         Frame.__init__(self, *args, **kwargs)
-        additionalCoins = ["0.01", "0.01", "0.02", "0.05", "0.1", "0.1", "0.1", "0.1", "0.1", "0.1", "0.2", "0.5", "1", "2",
-                                    "5"]
-        ticketMachine.coins_list += list(map(Decimal,additionalCoins))  # STARTOWE MONETY DLA AUTOMATU
+        additionalCoins = ["0.01", "0.01", "0.02", "0.05", "0.1", "0.1", "0.1", "0.1", "0.1", "0.1", "0.2", "0.5", "1",
+                           "2",
+                           "5"]
+        ticketMachine.coins_list += list(map(Decimal, additionalCoins))  # STARTOWE MONETY DLA AUTOMATU
         global pageOne
         pageOne = PageOne()
 
 
 class PageOne(Frame):
     '''first page of ticket machine conatain buttons entries ,methods connected with adding tickets '''
+
     def __init__(self, *args, **kwargs):
         Frame.__init__(self, *args, **kwargs)
 
@@ -87,10 +90,11 @@ class PageOne(Frame):
                     if amount > 0:
                         ticketMachine.addTicket(ticket, amount)
                     elif amount < 0:
-                        ticketMachine.ticketsPrice = 0
+                        #ticketMachine.ticketsPrice = 0
+                        entries[6 + i].set("0")
                         raise InapropriateAmountException("Zła ilość biletów")
                 except ValueError:
-                    ticketMachine.ticketsPrice = 0
+                    #ticketMachine.ticketsPrice = 0
                     raise InapropriateAmountException("Zła ilość biletów")
                 entries[6 + i].set("0")
                 i += 1
@@ -127,11 +131,13 @@ class PageTwo(Frame):
         i = 0
         for coin in userCoinContainer._coins_format_list:
             Button(self, text=coin,
-                   command=lambda coin=coin: userCoinContainer.addCoin(coin, userCoinContainer.submitAmount(entryAmountOfCoins.get())),
+                   command=lambda coin=coin: userCoinContainer.addCoin(coin, userCoinContainer.submitAmount(
+                       entryAmountOfCoins.get())),
                    height=2, width=4, font=16) \
                 .grid(row=1, column=i, sticky="nsew")
             i += 1
-        addTxt="dodaj monete klikając , do zapłaty " + str((ticketMachine.ticketsPrice - userCoinContainer.sumOfCoins()))
+        addTxt = "dodaj monete klikając , do zapłaty " + str(
+            (ticketMachine.ticketsPrice - userCoinContainer.sumOfCoins()))
         labelDodaj = Label(self, text=addTxt, height=2, width=30, font=16) \
             .grid(row=0, column=2, columnspan=8, sticky="nsew")
 
@@ -144,16 +150,13 @@ class PageTwo(Frame):
         Button(self, text="Zakończ transakcje", command=lambda: finishTransaction(), height=2, width=10). \
             grid(row=6, column=4, columnspan=4, sticky="nsew")
 
-
-
-
         def finishTransaction():
             '''method that  passes the amount of coins and checks for the remainder'''
             returnList = ticketMachine.remainderCalculator(userCoinContainer)
             if returnList is None:
                 return
             elif sum(returnList) == 0:
-                info  = "Dziękujemy za transakcję"
+                info = "Dziękujemy za transakcję"
             elif returnList == userCoinContainer.coins_list:
                 info = "Tylko odliczona kwota \n" + str(
                     ",".join([str(float(x)) for x in returnList]))
